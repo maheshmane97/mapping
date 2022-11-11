@@ -1,40 +1,32 @@
 package com.mm.mk.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mm.mk.dto.OrderRequest;
 import com.mm.mk.entity.Customer;
-import com.mm.mk.repo.CustomerRepo;
-import com.mm.mk.repo.ProductRepo;
-
-import lombok.extern.slf4j.Slf4j;
+import com.mm.mk.service.CustomerService;
 
 @RestController
 @RequestMapping("/dmart")
-@Slf4j
-public class OrderController {
+public class CustomerController {
 	
 	@Autowired
-	ProductRepo productRepo;
-	
-	@Autowired
-	CustomerRepo customerRepo;
+	CustomerService customerService;
 	
 	@PostMapping("/place")
-	private Customer placeOrder(@RequestBody OrderRequest orderRequest) {
-		System.out.println("In place method");
-		return customerRepo.save(orderRequest.getCustomer());
+	public Integer placeOrder(@RequestBody Customer customer) {
+		Customer customer2=customerService.placeOrder(customer);
+		return customer2.getId();
 	}
 	
-	@GetMapping
-	private List<Customer> allOrders(){
-		return customerRepo.findAll();
+	@GetMapping("/{id}")
+	public Customer getById(@PathVariable Integer id) {
+		return customerService.getById(id);
 	}
+	
 }
